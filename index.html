@@ -1,0 +1,171 @@
+<head>
+    <title>Rock Paper Scissors UI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="top">
+        <h1>Rock Paper Scissors</h1>
+        <h2>UI Implementation</h2>
+    </div>
+    <div class="buttons">
+        <input type="button" value="Rock" id="rock">
+        <input type="button" value="Paper" id="paper">
+        <input type="button" value="Scissors" id="scissors">
+    </div>
+    <div class="ring">
+        <p id='fight'>You've played <span id='yourChoice'>_</span> vs opponent's <span id='opponentChoice'>_</span> </p>
+    </div>
+    <div class="announcement">
+        <p id='result'>_</p>
+    </div>
+    <div class="score">
+        <span id="yourScore">YOUR SCORE</span>
+        <span id="opponentScore">OPPONENT SCORE</span>
+    </div>
+
+
+    <table id='history'>
+        <tr>
+            <th>Round Number</th>
+            <th>Your Hand</th>
+            <th>Your Score</th>
+            <th>Opponent Score</th>
+            <th>Opponent Hand</th>
+        </tr>
+
+    </table>
+
+
+</body>
+
+<script>
+
+let history = {
+    rows:[
+        {
+            //create an object with rows of game
+        }
+    ]
+};
+
+let yourScore = 0;
+let opponentScore = 0;
+
+const yourScoreHTML = document.querySelector('#yourScore');
+const opponentScoreHTML = document.querySelector('#opponentScore');
+
+const yourChoiceHTML = document.querySelector('#yourChoice');
+const opponentChoiceHTML = document.querySelector('#opponentChoice');
+
+const fight = document.querySelector('#fight');
+const result = document.querySelector('#result');
+function computerPlay(){
+    let choice = Math.random();
+    if(choice <= 0.33){
+        return "rock";
+    } else if (choice <= 0.66){
+        return "paper";
+    } else if (choice <= 0.99){
+        return "scissors";
+    }
+}
+
+function playRound(playerSelection, computerSelection){
+        yourChoiceHTML.textContent = playerSelection;
+        opponentChoiceHTML.textContent = computerSelection;
+
+        fight.style.visibility = 'visible';
+        result.style.visibility = 'visible';
+
+		if (playerSelection == computerSelection){
+            result.textContent = `It's a tie between ${playerSelection} and ${computerSelection}`;
+            addRound(playerSelection, yourScore, opponentScore, computerSelection);
+		} else {
+			if (playerSelection == "rock"){
+				if(computerSelection == "paper"){
+                    result.textContent = ("You lose, paper covers rock");
+                    opponentScore++;
+                    addRound(playerSelection, yourScore, opponentScore, computerSelection);
+				} else if (computerSelection == "scissors"){
+                    result.textContent = ("You win, rock smashes scissors");
+                    yourScore++;
+                    addRound(playerSelection, yourScore, opponentScore, computerSelection);
+				}
+			} else if (playerSelection == "paper"){
+				if(computerSelection =="rock"){
+                    result.textContent = ("You win, paper covers rock");
+                    yourScore++;
+                    addRound(playerSelection, yourScore, opponentScore, computerSelection);
+				} else if (computerSelection == "scissors"){
+                    result.textContent = ("You lose, scissors cut paper");
+                    opponentScore++;
+                    addRound(playerSelection, yourScore, opponentScore, computerSelection);
+				}
+			} else if (playerSelection == "scissors"){
+				if(computerSelection == "rock"){
+                    result.textContent = ("You lose, rock smashes scissors");
+                    opponentScore++;
+                    addRound(playerSelection, yourScore, opponentScore, computerSelection);
+				} else if (computerSelection == "paper"){
+                    result.textContent = ("You win, scissors cut paper");
+                    yourScore++;
+                    addRound(playerSelection, yourScore, opponentScore, computerSelection);
+				}
+			} else {
+				result.textContent = ("Critical error");
+			}
+		}
+	}
+
+function updateScore(){
+    yourScoreHTML.textContent = yourScore;
+    opponentScoreHTML.textContent = opponentScore;
+}
+
+const rockButton = document.querySelector('#rock');
+const paperButton = document.querySelector('#paper');
+const scissorsButton = document.querySelector('#scissors');
+
+
+rockButton.addEventListener('click', () => {
+    playRound("rock",computerPlay());
+    updateScore();
+})
+paperButton.addEventListener('click', () => {
+    playRound("paper",computerPlay());
+    updateScore();
+})
+scissorsButton.addEventListener('click', () => {
+    playRound("scissors",computerPlay());
+    updateScore();
+})
+
+let roundNum = 1;
+
+const tableHistory = document.querySelector('#history');
+
+function addRound(humanChoice, humanWin, computerWin, computerChoice){
+    let tRow = document.createElement('tr');
+    let col1 = document.createElement('td');
+    let col2 = document.createElement('td');
+    let col3 = document.createElement('td');
+    let col4 = document.createElement('td');
+    let col5 = document.createElement('td');
+
+    col1.textContent = roundNum;
+    col2.textContent = humanChoice;
+    col3.textContent = humanWin;
+    col4.textContent = computerWin;
+    col5.textContent = computerChoice;
+    tRow.appendChild(col1);
+    tRow.appendChild(col2);
+    tRow.appendChild(col3);
+    tRow.appendChild(col4);
+    tRow.appendChild(col5);
+
+    //tableHistory.appendChild(tRow);
+    tableHistory.insertBefore(tRow, tableHistory.childNodes[2]);
+
+    roundNum++;
+}
+</script>

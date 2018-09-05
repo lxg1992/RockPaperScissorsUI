@@ -1,0 +1,28 @@
+html {
+    box-sizing: border-box;
+    background:#ffc600;
+    font-family:'helvetica neue';
+    font-size: 20px;
+    font-weight: 200;
+  }
+
+#fight{
+    visibility: visible;
+}
+
+#result{
+    visibility: visible;
+}
+
+.score{
+    visibility: visible;
+}
+
+table tr th{
+    border: 1px;   
+    border-color:red; 
+}
+
+
+
+
